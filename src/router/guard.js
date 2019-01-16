@@ -1,0 +1,22 @@
+import store from "@/store";
+export default (vueRouter, to, from, next) => {
+    let login = true, //是否登录
+        toPass = v => ['login', 'index'].some(el => el == v), //判断是否可以直接访问的页面
+        isActive = (v) => v.meta && v.meta.tabbar; //判断是不是主页面
+    if (to.name) {
+        if (toPass(to.name)) {
+            next();
+        } else {
+            if (login) {
+                if (isActive(to)) {
+                    setActive(to);
+                }
+                next();
+            } else {
+                vueRouter.push('/login');
+            }
+        }
+    } else {
+        vueRouter.push('/');
+    }
+};

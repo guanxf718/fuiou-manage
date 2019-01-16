@@ -1,0 +1,10 @@
+@mixin flex-nowrap {
+    display: flex;
+    flex-wrap: nowrap;
+    &>div,
+    &>section,
+    &>p,
+    &>li {
+        flex-grow: 1;
+    }
+}
