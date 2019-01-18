@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapActions } from 'vuex';
 export default {
     data() {
         return {
@@ -36,6 +36,8 @@ export default {
     },
     methods: {
         ...mapMutations(['CHANGEMENU']),
+        ...mapMutations(["CLEAR_USER_INFO"]),
+        ...mapActions(["doUserLoginoutAction"]),
         /**
          * 改变左侧导航栏
          */
@@ -47,10 +49,17 @@ export default {
          * 退出登录
          */
         loginOut() {
-            console.log('退出登录');
+            this.$confirm("是否确认退出登录？", "退出登录").then(
+                confirm => {
+                    this.doUserLoginoutAction().then(() => {
+                        this.$router.push({ name: "login" });
+                    });
+                },
+                cancel => { }
+            );
         },
         /**
-         * 
+         * 下拉列表
          */
         dropdownCommand(command) {
             this[command] && this[command]();
@@ -67,13 +76,14 @@ export default {
         line-height: $lineHeight-l;
     }
     .left {
-        max-width: $menu-weight;
+        width: $menu-weight;
         font-size: $text-xxl;
         background-color: $color-gray-3;
         color: $color-white;
         text-align: center;
     }
     .right {
+        flex-grow: 1;
         padding-left: $spacing-x;
         @include flex-nowrap;
         div:first-child {
@@ -94,6 +104,7 @@ export default {
             }
         }
         div:last-child {
+            flex-grow: 1;
             text-align: right;
         }
     }

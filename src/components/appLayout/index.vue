@@ -1,5 +1,5 @@
 <template>
-    <el-container>
+    <el-container class="full">
         <el-header>
             <app-header></app-header>
         </el-header>
@@ -8,7 +8,7 @@
                 <app-menu></app-menu>
             </el-aside>
             <el-main>
-                <slot></slot>
+                <slot name="view"></slot>
             </el-main>
         </el-container>
     </el-container>
@@ -24,9 +24,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-container {
-    height: 100%;
-}
 .el-header {
     padding-left: 0;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);

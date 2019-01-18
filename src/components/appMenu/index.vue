@@ -18,7 +18,7 @@
                     :key="_el.index"
                     :index="_el.name"
                     @click="pathTo(_el.name)"
-                >{{_el.title}}</el-menu-item>
+                >{{_el.meta.title}}</el-menu-item>
             </el-submenu>
         </el-menu>
     </div>

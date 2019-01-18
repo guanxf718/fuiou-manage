@@ -4,9 +4,12 @@ const AppMenu = () =>
     import ('./appMenu/index.vue');
 const AppHeader = () =>
     import ('./appHeader/index.vue');
+const FormTemplate = () =>
+    import ('./formTemplate/index.vue');
 
 module.exports = {
     AppLayout,
     AppMenu,
-    AppHeader
+    AppHeader,
+    FormTemplate
 };

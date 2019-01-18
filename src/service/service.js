@@ -1,11 +1,11 @@
 // 用户信息或关于用户操作的接口
 export default (axios, config) => {
     return {
-        toLogin(data = {}) {
-            return axios.get('data/login.json');
+        doUserLogin(data = {}) {
+            return axios.get('data/login.json', data);
         },
         orderList(data = {}) {
-            return axios.get('data/order.json');
+            return axios.get('/data/order.json', data);
         }
     };
 };

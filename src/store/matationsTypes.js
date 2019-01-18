@@ -1,1 +1,3 @@
 export const CHANGEMENU = 'CHANGEMENU';
+export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
+export const CLEAR_USER_INFO = 'CLEAR_USER_INFO';
