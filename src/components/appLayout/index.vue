@@ -8,17 +8,24 @@
                 <app-menu></app-menu>
             </el-aside>
             <el-main>
-                <slot name="view"></slot>
+                <div>
+                    <section>
+                        <app-breadcrumb v-if="$route.name!=='home'"></app-breadcrumb>
+                    </section>
+                    <section>
+                        <slot name="view"></slot>
+                    </section>
+                </div>
             </el-main>
         </el-container>
     </el-container>
 </template>
 
 <script>
-import { AppMenu, AppHeader } from "@/components";
+import { AppMenu, AppHeader, AppBreadcrumb } from "@/components";
 export default {
     components: {
-        AppMenu, AppHeader
+        AppMenu, AppHeader, AppBreadcrumb
     },
 }
 </script>
@@ -31,6 +38,18 @@ export default {
 .el-aside {
     background-color: $color-nav-bg;
     width: auto !important;
+}
+.el-main {
+    > div {
+        height: 100%;
+        @include flex-column;
+        > section {
+            &:nth-child(2) {
+                flex-grow: 1;
+                height: 80%;
+            }
+        }
+    }
 }
 </style>
 

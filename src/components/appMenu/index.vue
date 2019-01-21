@@ -8,7 +8,17 @@
             text-color="#fff"
             active-text-color="#ffd04b"
         >
-            <el-submenu v-for="el in menuList" :key="el.index" :index="el.name">
+            <el-menu-item
+                v-for="el in menuList"
+                v-if="!el.children"
+                :key="el.index"
+                :index="el.name"
+                @click="pathTo(el.name)"
+            >
+                <i :class="el.meta.icon"></i>
+                <span slot="title">{{el.meta.title}}</span>
+            </el-menu-item>
+            <el-submenu v-if="el.children" v-for="el in menuList" :key="el.index" :index="el.name">
                 <template slot="title">
                     <i :class="el.meta.icon"></i>
                     <span>{{el.meta.title}}</span>
@@ -31,10 +41,9 @@ import routerList from '@/router/router';
 export default {
     data() {
         return {
-            //默认选中
-            activeTag: '',
             //列表
             menuList: [],
+            activeTag: ''
         }
     },
     mounted() {
@@ -54,10 +63,9 @@ export default {
          */
         initMenuActive() {
             let curMenuTag = this.$route.name;
-            if (curMenuTag == this.activeTag) {
-                return;
+            if (curMenuTag !== this.activeTag) {
+                this.activeTag = curMenuTag;
             }
-            this.activeTag = curMenuTag;
         },
         /**
          * 页面跳转
@@ -65,6 +73,11 @@ export default {
         pathTo(name) {
             this.$router.push({ name: name, params: {}, query: {} });
         },
+    },
+    watch: {
+        $route(to, from) {
+            this.activeTag = to.name;
+        }
     },
     computed: {
         ...mapGetters(['changeMenu']),

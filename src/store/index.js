@@ -8,7 +8,7 @@ Vue.use(Vuex);
 
 let state = {
     changeMenu: false,
-    userInfo: null
+    userInfo: null,
 };
 
 let storeState = store => {

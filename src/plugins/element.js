@@ -25,7 +25,9 @@ import {
     DatePicker,
     Select,
     Option,
-    OptionGroup
+    OptionGroup,
+    Breadcrumb,
+    BreadcrumbItem
 } from 'element-ui'
 
 Vue.use(Button)
@@ -51,7 +53,9 @@ Vue.use(Button)
     .use(Select)
     .use(Option)
     .use(OptionGroup)
-    .use(Loading);
+    .use(Loading)
+    .use(Breadcrumb)
+    .use(BreadcrumbItem);
 
 Vue.component(Message.name, Message);
 Vue.component(MessageBox.name, MessageBox);

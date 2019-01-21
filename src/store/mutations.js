@@ -1,7 +1,7 @@
 import {
     CHANGEMENU,
     UPDATE_USER_INFO,
-    CLEAR_USER_INFO
+    CLEAR_USER_INFO,
 } from './matationsTypes'
 
 export default {
@@ -18,5 +18,5 @@ export default {
     },
     [CLEAR_USER_INFO](state) {
         state.userInfo = null;
-    }
+    },
 }
