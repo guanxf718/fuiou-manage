@@ -6,6 +6,15 @@ export default (axios, config) => {
         },
         orderList(data = {}) {
             return axios.get('/data/order.json', data);
+        },
+        commodityList(data = {}) {
+            return axios.get('/data/commodityList.json', data);
+        },
+        getCommodity(data = {}) {
+            return axios.get('/data/commodity.json', data);
+        },
+        commodityGrou(data = {}) {
+            return axios.get('/data/commodityGrou.json', data);
         }
     };
 };

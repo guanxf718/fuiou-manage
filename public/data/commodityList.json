@@ -1,0 +1,109 @@
+{
+    "data": {
+        "rowCount": 300,
+        "pageCount": 1,
+        "dataList": [{
+                "commodityNo": "0000001",
+                "commodityNmae": "彩电",
+                "price": 9999999,
+                "visit": 99,
+                "stock": 999,
+                "sales": 789,
+                "upperLower": "00",
+                "creationTime": "2019-01-22 15:16:33"
+            },
+            {
+                "commodityNo": "0000002",
+                "commodityNmae": "冰箱",
+                "price": 880000,
+                "visit": 99,
+                "stock": 9994,
+                "sales": 78,
+                "upperLower": "01",
+                "creationTime": "2019-01-22 14:16:33"
+            },
+            {
+                "commodityNo": "0000003",
+                "commodityNmae": "空调",
+                "price": 400400,
+                "visit": 99,
+                "stock": 9994,
+                "sales": 78,
+                "upperLower": "01",
+                "creationTime": "2019-01-22 16:16:33"
+            },
+            {
+                "commodityNo": "0000004",
+                "commodityNmae": "油烟机",
+                "price": 200500,
+                "visit": 998889,
+                "stock": 9994,
+                "sales": 78,
+                "upperLower": "00",
+                "creationTime": "2019-01-22 16:16:33"
+            },
+            {
+                "commodityNo": "0000005",
+                "commodityNmae": "iphone XS",
+                "price": 1050000,
+                "visit": 998889,
+                "stock": 9994,
+                "sales": 7888899,
+                "upperLower": "00",
+                "creationTime": "2019-01-22 19:16:33"
+            },
+            {
+                "commodityNo": "0000001",
+                "commodityNmae": "彩电",
+                "price": 9999999,
+                "visit": 99,
+                "stock": 999,
+                "sales": 789,
+                "upperLower": "01",
+                "creationTime": "2019-01-22 15:16:33"
+            },
+            {
+                "commodityNo": "0000002",
+                "commodityNmae": "冰箱",
+                "price": 880000,
+                "visit": 99,
+                "stock": 9994,
+                "sales": 78,
+                "upperLower": "01",
+                "creationTime": "2019-01-22 14:16:33"
+            },
+            {
+                "commodityNo": "0000003",
+                "commodityNmae": "空调",
+                "price": 400400,
+                "visit": 99,
+                "stock": 9994,
+                "sales": 78,
+                "upperLower": "00",
+                "creationTime": "2019-01-22 16:16:33"
+            },
+            {
+                "commodityNo": "0000004",
+                "commodityNmae": "油烟机",
+                "price": 200500,
+                "visit": 998889,
+                "stock": 9994,
+                "sales": 78,
+                "upperLower": "00",
+                "creationTime": "2019-01-22 16:16:33"
+            },
+            {
+                "commodityNo": "0000005",
+                "commodityNmae": "iphone XS",
+                "price": 1050000,
+                "visit": 998889,
+                "stock": 9994,
+                "sales": 7888899,
+                "upperLower": "01",
+                "creationTime": "2019-01-22 19:16:33"
+            }
+        ]
+    },
+    "resultCode": "000000",
+    "resultMsg": "成功"
+}

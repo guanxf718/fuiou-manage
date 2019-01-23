@@ -1,10 +1,10 @@
 <template>
     <div id="app">
-        <transition v-if="$route.meta && $route.meta.appLayout" name="slide-fade" mode="out-in">
-            <app-layout>
-                <router-view slot="view"></router-view>
-            </app-layout>
-        </transition>
+        <app-layout v-if="$route.meta && $route.meta.appLayout">
+            <transition name="slide-fade" mode="out-in" slot="view">
+                <router-view></router-view>
+            </transition>
+        </app-layout>
         <transition v-else name="slide-fade" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -84,7 +84,7 @@ export default {
     user-select: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-width: 1024px;
+    min-width: 1200px;
 }
 </style>
 

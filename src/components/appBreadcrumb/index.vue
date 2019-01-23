@@ -25,6 +25,11 @@ export default {
             }
             this.levelList = matched;
         }
+    },
+    watch: {
+        $route() {
+            this.getBreadcrumb();
+        }
     }
 }
 </script>

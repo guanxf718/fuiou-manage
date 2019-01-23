@@ -5,14 +5,14 @@
                 <el-input
                     v-if="innerObj.condition.input"
                     placeholder="请输入内容"
-                    v-model="paging.inputValue"
+                    v-model="originalFree.inputValue"
                     @keyup.enter.native="searchData"
                 >
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 </el-input>
                 <el-date-picker
                     v-if="innerObj.condition.date"
-                    v-model="paging.queryDate"
+                    v-model="originalWatch.queryDate"
                     type="daterange"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -21,30 +21,42 @@
                     value-format="yyyy-MM-dd"
                 ></el-date-picker>
                 <el-select
-                    v-if="innerObj.condition.state"
-                    v-model="paging.stateValue"
-                    placeholder="状态"
+                    v-model="originalWatch[el.bind]"
+                    v-for="(el,index) in innerObj.stateList"
+                    :key="index"
                 >
                     <el-option
-                        v-for="item in innerObj.state"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="_el in el.option"
+                        :key="_el.index"
+                        :label="_el.label"
+                        :value="_el.value"
                     ></el-option>
                 </el-select>
                 <el-button type="primary" @click="searchData">搜索</el-button>
             </div>
             <div>
                 <el-button
+                    v-for="el in innerObj.buttonList"
+                    :key="el.index"
+                    :type="el.type"
+                    @click="operations('',el.func)"
+                >{{el.label}}</el-button>
+                <el-button
                     v-if="innerObj.condition.add"
                     type="primary"
                     @click="add"
-                >新增{{innerObj.pageTitle}}</el-button>
+                >新增{{innerObj.pageTitle}}</el-button>
             </div>
         </div>
         <div class="search-content">
-            <el-table slot="table" :data="innerObj.dataList.dataBody" height="100" stripe>
-                <el-table-column type="index" label="ID"></el-table-column>
+            <el-table
+                slot="table"
+                :data="innerObj.dataList.dataBody"
+                @selection-change="handleSelectionChange"
+                height="100"
+                stripe
+            >
+                <el-table-column :type="innerObj.condition.type" label="ID"></el-table-column>
                 <template v-for="v in innerObj.dataList.dataHead">
                     <el-table-column
                         v-if="v.operations"
@@ -68,11 +80,11 @@
         </div>
         <div>
             <el-pagination
-                :page-size="paging.pageSize"
+                :page-size="originalFree.pageSize"
                 @current-change="currentChange"
                 background
                 layout="prev, pager, next"
-                :total="paging.rowCount"
+                :total="originalFree.rowCount"
             ></el-pagination>
         </div>
     </div>
@@ -92,21 +104,18 @@ export default {
     },
     data() {
         return {
-            paging: this.value,
+            originalWatch: this.value.watch,
+            originalFree: this.value.free
         }
     },
-    watch: {
-        'paging.stateValue'() {
-            this.searchData();
-        },
-    },
     methods: {
+
         /**
          * 分页
          */
         currentChange(val) {
-            this.paging.pageCount = val;
-            this.searchData();
+            this.originalFree.pageCount = val;
+            this.$parent.searchData();
         },
         /**
          * 操作按钮
@@ -126,6 +135,20 @@ export default {
         searchData() {
             this.$parent.searchData();
         },
+        /**
+         * 选择框
+         */
+        handleSelectionChange(val) {
+            this.$parent.quantity = val;
+        }
+    },
+    watch: {
+        originalWatch: {
+            handler() {
+                this.$parent.searchData();
+            },
+            deep: true
+        }
     },
 }
 </script>
@@ -142,14 +165,16 @@ export default {
                 .el-input {
                     width: 300px;
                 }
-                & > * {
+            }
+            > div {
+                > * {
                     margin: 0 $spacing-s $spacing-s 0;
                 }
             }
         }
         &.search-content {
             flex-grow: 1;
-            height: 80%;
+            height: 50%;
             .el-table {
                 height: 100% !important;
             }

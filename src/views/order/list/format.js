@@ -1,7 +1,8 @@
+import utils from '../../../utils/utils';
 /**
  * 设置表头
  */
-const TableHeader = () => {
+const tableHeader = () => {
     let array = [
         { prop: 'orderNo', label: '订单号', width: 90 },
         { prop: 'orderType', label: '订单类型' },
@@ -33,42 +34,32 @@ const TableHeader = () => {
  * 格式数据
  * @param {*} data 
  */
-const FormatOrderList = (data) => {
+const tableBody = (data) => {
     let obj = {},
         arry = [];
     data.dataList.forEach(el => {
         obj = {
             orderNo: el.orderNo,
             orderType: el.orderType == '01' ? '堂吃订单' : '外卖订单',
-            orderAmt: FormatPrice(el.orderAmt),
-            orderDisAmt: FormatPrice(el.orderDisAmt),
-            couponAmt: FormatPrice(el.couponAmt),
-            expressAmt: FormatPrice(el.expressAmt),
-            payAmt: FormatPrice(el.payAmt),
+            orderAmt: utils.formatPrice(el.orderAmt),
+            orderDisAmt: utils.formatPrice(el.orderDisAmt),
+            couponAmt: utils.formatPrice(el.couponAmt),
+            expressAmt: utils.formatPrice(el.expressAmt),
+            payAmt: utils.formatPrice(el.payAmt),
             payType: el.payType == 'LETPAY' ? '微信支付' : '会员卡支付',
             payTm: el.payTm,
-            integralDeductionAmt: FormatPrice(el.integralDeductionAmt),
+            integralDeductionAmt: utils.formatPrice(el.integralDeductionAmt),
             contacterName: el.orderAddressInfo.contacterName,
             contacterphone: el.orderAddressInfo.phone,
             expressId: el.expressId,
             shopName: el.shopInfo.shopName
         }
-        for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                obj[key] = obj[key] || '-';
-            }
-        }
-        arry.push(obj);
+        arry.push(utils.formatTh(obj));
     });
     return arry;
 }
 
-/**
- * 格式化价格
- */
-const FormatPrice = el => el ? (el / 100 * 1).toFixed(2) : 0;
-
 export default {
-    FormatOrderList,
-    TableHeader
+    tableHeader,
+    tableBody
 };

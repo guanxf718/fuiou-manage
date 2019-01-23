@@ -9,35 +9,78 @@ export default {
     data() {
         return {
             innerObj: {
-                pageTitle:'订单',
+                pageTitle: '订单',
                 // 所需组件 input搜索框 | date日期选择框 | state查询状态
                 condition: {
                     input: true,
                     date: true,
-                    state: true,
+                    type: 'index',
+                },
+                // 数据列表
+                dataList: {
+                    dataHead: {},
+                    dataBody: []
                 },
                 // 状态列表
-                state: [
-                    { value: '', label: '全部' },
-                    { value: '01', label: '堂吃订单' },
-                    { value: '02', label: '外卖订单' }
+                stateList: [
+                    {
+                        bind: 'orderType',
+                        // 订单类型
+                        option: [
+                            { value: '', label: '全部' },
+                            { value: '01', label: '堂吃订单' },
+                            { value: '02', label: '外卖订单' }
+                        ]
+                    },
+                    {
+                        bind: 'orderState',
+                        // 订单状态
+                        option: [
+                            { value: '', label: '全部' },
+                            { value: '01', label: '待付款' },
+                            { value: '02', label: '待发货' },
+                            { value: '03', label: '已发货' },
+                            { value: '04', label: '已完成' },
+                            { value: '05', label: '已关闭' },
+                            { value: '06', label: '退款中' },
+                        ]
+                    },
+                    {
+                        bind: 'orderPayType',
+                        // 付款方式
+                        option: [
+                            { value: '', label: '全部' },
+                            { value: '01', label: '微信支付' },
+                            { value: '02', label: '会员卡支付' }
+                        ]
+                    },
                 ],
-                // 数据列表
-                dataList: {},
+                // 批量操作按钮
+                buttonList: [
+                    { label: '导出EXCEL', func: 'export', type: 'primary' },
+                ]
             },
             original: {
-                //当前页
-                pageCount: 1,
-                //多少行
-                pageSize: 20,
-                //总行数
-                rowCount: 1,
-                //搜索内容
-                inputValue: '',
-                //搜索日期
-                queryDate: [],
-                //状态
-                stateValue: '',
+                watch: {
+                    //订单类型
+                    orderType: '',
+                    //订单状态
+                    orderState: '',
+                    //订单支付类型 
+                    orderPayType: '',
+                    //搜索日期
+                    queryDate: [],
+                },
+                free: {
+                    //当前页
+                    pageCount: 1,
+                    //多少行
+                    pageSize: 20,
+                    //总行数
+                    rowCount: 100,
+                    //搜索内容
+                    inputValue: '',
+                },
             },
         }
     },
@@ -48,7 +91,7 @@ export default {
     },
     methods: {
         getTableHeader() {
-            this.innerObj.dataList.dataHead = Format.TableHeader();
+            this.innerObj.dataList.dataHead = Format.tableHeader();
         },
         /**
          * 搜索订单列表
@@ -56,12 +99,13 @@ export default {
         searchData() {
             let vm = this;
             let params = {
-                ...vm.original
+                ...vm.original.watch,
+                ...vm.original.free
             }
-            console.log("搜索了", params);
+            console.log(params);
             vm.$root.commonCall("orderList", params, {
                 success(res) {
-                    vm.innerObj.dataList.dataBody = Format.FormatOrderList(res);
+                    vm.innerObj.dataList.dataBody = Format.tableBody(res);
                     vm.original.pageCount = res.pageCount;
                     vm.original.rowCount = res.rowCount;
                 },
@@ -75,28 +119,37 @@ export default {
             switch (func) {
                 // 详情
                 case 'details':
-                    this.orderDetails(row);
+                    this.operationsDetails(row);
                     break;
                 // 删除 
                 case 'delete':
-                    this.orderDelete(row);
+                    this.operationsDelete(row);
+                    break;
+                //导出
+                case 'export':
+                    this.operationsExport(row);
                     break;
                 default: break;
             }
         },
         /**
-         * 订单详情
+         * 详情
          */
-        orderDetails(el) {
-            console.log('查看订单详情', el);
+        operationsDetails(el) {
+            console.log('详情');
         },
         /**
-         * 删除订单
+         * 删除
          */
-        orderDelete(el) {
-            console.log('删除订单', el);
+        operationsDelete(el) {
+            console.log('删除');
+        },
+        /**
+         * 导出
+         */
+        operationsExport() {
+            console.log('导出');
         }
-
     },
     components: {
         FormTemplate

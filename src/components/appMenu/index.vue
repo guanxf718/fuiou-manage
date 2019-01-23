@@ -8,23 +8,14 @@
             text-color="#fff"
             active-text-color="#ffd04b"
         >
-            <el-menu-item
-                v-for="el in menuList"
-                v-if="!el.children"
-                :key="el.index"
-                :index="el.name"
-                @click="pathTo(el.name)"
-            >
-                <i :class="el.meta.icon"></i>
-                <span slot="title">{{el.meta.title}}</span>
-            </el-menu-item>
-            <el-submenu v-if="el.children" v-for="el in menuList" :key="el.index" :index="el.name">
+            <el-submenu v-for="el in menuList" :key="el.index" :index="el.name">
                 <template slot="title">
                     <i :class="el.meta.icon"></i>
                     <span>{{el.meta.title}}</span>
                 </template>
                 <el-menu-item
                     v-for="_el in el.children"
+                    v-if="!_el.meta.none"
                     :key="_el.index"
                     :index="_el.name"
                     @click="pathTo(_el.name)"
