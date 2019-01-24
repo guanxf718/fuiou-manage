@@ -21,10 +21,11 @@ const tableHeader = () => {
             prop: 'option',
             label: '操作',
             operations: [
-                { label: '编辑', func: 'edit', type: 'warning', inquiry: false },
+                { label: '编辑', func: 'edit', type: 'success', inquiry: false },
                 { label: '推广', func: 'extension', type: 'primary', inquiry: false },
+                { label: '删除', func: 'delete', type: 'danger', inquiry: true },
             ],
-            width: 150
+            width: 210
         }
     ];
     return array;

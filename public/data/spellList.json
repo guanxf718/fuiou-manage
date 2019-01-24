@@ -1,0 +1,35 @@
+{
+    "data": {
+        "rowCount": 300,
+        "pageCount": 1,
+        "dataList": [{
+                "spellId": "0000001",
+                "spellName": "年货吞",
+                "state": "01",
+                "startTime": "2017-01-29 14:16:33",
+                "endTime": "2017-01-29 14:16:33"
+            },
+            {
+                "spellId": "0000002",
+                "spellName": "有好吃的啊了",
+                "state": "01",
+                "startTime": "2017-01-29 14:16:33",
+                "endTime": "2017-01-29 14:16:33"
+            }, {
+                "spellId": "0000003",
+                "spellName": "这个东西真好吃",
+                "state": "01",
+                "startTime": "2017-01-29 14:16:33",
+                "endTime": "2017-01-29 14:16:33"
+            }, {
+                "spellId": "0000004",
+                "spellName": "优惠大甩卖",
+                "state": "01",
+                "startTime": "2017-01-29 14:16:33",
+                "endTime": "2017-01-29 14:16:33"
+            }
+        ]
+    },
+    "resultCode": "000000",
+    "resultMsg": "成功"
+}

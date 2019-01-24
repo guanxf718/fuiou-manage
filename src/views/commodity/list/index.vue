@@ -1,9 +1,11 @@
 <template>
-    <form-template ref="searchForm" :inner-obj="innerObj" v-model="original"></form-template>
+    <form-template ref="searchForm" :inner-obj="innerObj" v-model="original">
+        <extended-code ref="extendedCode" slot="dialogs"></extended-code>
+    </form-template>
 </template>
 
 <script>
-import { FormTemplate } from "@/components";
+import { FormTemplate, ExtendedCode } from "@/components";
 import Format from "./format.js";
 export default {
     data() {
@@ -48,8 +50,7 @@ export default {
                 buttonList: [
                     { label: '上架', func: 'onShelf', type: 'primary', inquiry: true },
                     { label: '下架', func: 'offShelf', type: 'primary', inquiry: true },
-                    { label: '分组', func: 'grou', type: 'success', inquiry: true },
-                    { label: '删除', func: 'delete', type: 'danger', inquiry: true },
+                    { label: '分组', func: 'grou', type: 'warning', inquiry: true },
                 ],
                 // 所需展示字段
                 field: {
@@ -105,7 +106,7 @@ export default {
                     ...vm.original.free
                 }
             console.log(params);
-            vm.$root.commonCall("commodityList", params, {
+            vm.$root.commonCall("getCommodityList", params, {
                 success(res) {
                     vm.innerObj.dataList.dataBody = Format.tableBody(res);
                     vm.original.pageCount = res.pageCount;
@@ -121,7 +122,7 @@ export default {
             switch (func) {
                 // 删除 
                 case 'delete':
-                    this.operationsDelete(this.quantity, label);
+                    this.operationsDelete(row, label);
                     break;
                 // 上架
                 case 'onShelf':
@@ -158,21 +159,12 @@ export default {
          * 编辑
          */
         operationsEdit(el) {
-            let vm = this,
-                params = {
-                    commodityNo: el.commodityNo
-                }
-            vm.$root.commonCall("getCommodity", params, {
-                success(res) {
-                    console.log(res);
-                },
-                failMes: `获取${vm.pageTitle}失败！`
-            });
+            this.$router.push({ name: 'commodityAdd' });
         },
         /**
          * 删除
          */
-        operationsDelete(quantity, label) {
+        operationsDelete(row, label) {
             let vm = this;
             let params = {};
             return this.$root.commonCall("deleteService", params, {
@@ -188,7 +180,9 @@ export default {
          */
         operationsShelf(quantity, label) {
             let vm = this;
-            let params = {};
+            let params = {
+                quantityId: this.quantityId
+            };
             return this.$root.commonCall("deleteService", params, {
                 success() {
                     vm.$message.success(`${label}成功！`);
@@ -207,17 +201,17 @@ export default {
          * 推广
          */
         operationsExtension(el) {
-            console.log('推广');
+            this.$refs.extendedCode.dialogVisible = true;
         },
         /**
          * 新增
          */
         add() {
-            console.log('新增新增');
+            this.operationsEdit();
         }
     },
     components: {
-        FormTemplate
+        FormTemplate, ExtendedCode
     }
 }
 </script>

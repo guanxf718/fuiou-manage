@@ -123,6 +123,7 @@ export default {
         operations(row, func, label, inquiry) {
             if (this.fileterSelection(row)) {
                 if (inquiry) {
+                    console.log(this.$parent.quantityName);
                     this.$confirm(`确定${label} 「${this.$parent.quantityName.join('，')}」 ${this.innerObj.pageTitle}？`, `${label}`).then(
                         confirm => {
                             this.$parent.needToAsk(row, func, label);
@@ -140,19 +141,19 @@ export default {
          * 是否选择批量操作的数据
          */
         fileterSelection(row) {
-            if (this.innerObj.condition.type == 'selection') {
-                if (!this.$parent.quantity.length && !row) {
-                    this.$message.warning(`请选择需要操作的${this.innerObj.pageTitle}！`);
-                    return false;
-                } else {
-                    // 批量数据处理
-                    this.setQuantity(row);
-                    return true;
-                }
-            } else {
+            if (row) {
                 this.$parent.quantityId = [row[this.innerObj.field.id]];
                 this.$parent.quantityName = [row[this.innerObj.field.name]];
                 return true;
+            } else {
+                if (this.$parent.quantity.length) {
+                    // 批量数据处理
+                    this.setQuantity(row);
+                    return true;
+                } else {
+                    this.$message.warning(`请选择需要操作的${this.innerObj.pageTitle}！`);
+                    return false;
+                }
             }
         },
         /**
@@ -221,6 +222,9 @@ export default {
             > div {
                 > * {
                     margin: 0 $spacing-s $spacing-s 0;
+                    &:last-child {
+                        margin-right: 0;
+                    }
                 }
             }
         }

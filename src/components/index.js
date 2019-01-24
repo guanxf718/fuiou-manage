@@ -11,6 +11,10 @@ const AppBreadcrumb = () =>
 
 const OrderDetails = () =>
     import ('./appDialogs/orderDetails/index.vue');
+const AddGroup = () =>
+    import ('./appDialogs/addGroup/index.vue');
+const ExtendedCode = () =>
+    import ('./appDialogs/extendedCode/index.vue');
 
 module.exports = {
     AppLayout,
@@ -18,5 +22,7 @@ module.exports = {
     AppHeader,
     FormTemplate,
     AppBreadcrumb,
-    OrderDetails
+    OrderDetails,
+    AddGroup,
+    ExtendedCode
 };

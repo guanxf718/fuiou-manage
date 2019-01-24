@@ -4,18 +4,20 @@ import utils from '../../../utils/utils';
  */
 const tableHeader = () => {
     let array = [
-        { prop: 'grouId', label: '分组编号' },
-        { prop: 'grouName', label: '分组名称' },
-        { prop: 'commodityNumber', label: '商品数' },
-        { prop: 'creationTime', label: '创建时间', width: 120 },
+        { prop: 'spellName', label: '活动名称' },
+        { prop: 'state', label: '活动状态' },
+        { prop: 'startTime', label: '起始时间' },
+        { prop: 'endTime', label: '结束时间' },
         {
             prop: 'option',
             label: '操作',
             operations: [
                 { label: '编辑', func: 'edit', type: 'success', inquiry: false },
+                { label: '推广', func: 'extension', type: 'primary', inquiry: false },
+                { label: '失效', func: 'invalid', type: 'warning', inquiry: true },
                 { label: '删除', func: 'delete', type: 'danger', inquiry: true },
             ],
-            width: 150
+            width: 280
         }
     ];
     return array;
@@ -29,10 +31,10 @@ const tableBody = (data) => {
         arry = [];
     data.dataList.forEach((el, index) => {
         obj = {
-            grouId: el.grouId,
-            grouName: el.grouName,
-            commodityNumber: el.commodityNumber,
-            creationTime: el.creationTime
+            spellName: el.spellName,
+            state: el.state,
+            startTime: el.startTime,
+            endTime: el.endTime
         }
         arry.push(utils.formatTh(obj));
     });

@@ -1,9 +1,11 @@
 <template>
-    <form-template ref="searchForm" :inner-obj="innerObj" v-model="original"></form-template>
+    <form-template ref="searchForm" :inner-obj="innerObj" v-model="original">
+        <add-group ref="addGroup" slot="dialogs"></add-group>
+    </form-template>
 </template>
 
 <script>
-import { FormTemplate } from "@/components";
+import { FormTemplate, AddGroup } from "@/components";
 import Format from "./format.js";
 export default {
     data() {
@@ -66,8 +68,7 @@ export default {
                     ...vm.original.watch,
                     ...vm.original.free
                 }
-            console.log(params);
-            vm.$root.commonCall("commodityGrou", params, {
+            vm.$root.commonCall("getCommodityGrou", params, {
                 success(res) {
                     vm.innerObj.dataList.dataBody = Format.tableBody(res);
                     vm.original.free.pageCount = res.pageCount;
@@ -104,16 +105,7 @@ export default {
          * 编辑
          */
         operationsEdit(el) {
-            let vm = this,
-                params = {
-                    commodityNo: el.commodityNo
-                }
-            vm.$root.commonCall("commodityGrou", params, {
-                success(res) {
-                    console.log(res);
-                },
-                failMes: `获取${vm.pageTitle}失败！`
-            });
+            this.$refs.addGroup.dialogVisible = true;
         },
         operationsDelete() {
             let vm = this;
@@ -130,11 +122,11 @@ export default {
          * 新增
          */
         add() {
-            console.log('新增新增');
+            this.operationsEdit();
         }
     },
     components: {
-        FormTemplate
+        FormTemplate, AddGroup
     }
 }
 </script>

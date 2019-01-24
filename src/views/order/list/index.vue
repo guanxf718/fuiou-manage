@@ -115,7 +115,7 @@ export default {
                 ...vm.original.free
             }
             console.log(params);
-            vm.$root.commonCall("orderList", params, {
+            vm.$root.commonCall("getOrderList", params, {
                 success(res) {
                     vm.innerObj.dataList.dataBody = Format.tableBody(res);
                     vm.original.pageCount = res.pageCount;

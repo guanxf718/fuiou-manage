@@ -133,7 +133,7 @@ export default [
                 meta: {
                     auth: true,
                     appLayout: true,
-                    title: '发布商品',
+                    title: '新增商品',
                     visit: true,
                     none: true
                 },
