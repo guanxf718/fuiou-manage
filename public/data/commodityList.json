@@ -4,7 +4,7 @@
         "pageCount": 1,
         "dataList": [{
                 "commodityNo": "0000001",
-                "commodityNmae": "彩电",
+                "commodityName": "彩电",
                 "price": 9999999,
                 "visit": 99,
                 "stock": 999,
@@ -14,7 +14,7 @@
             },
             {
                 "commodityNo": "0000002",
-                "commodityNmae": "冰箱",
+                "commodityName": "冰箱",
                 "price": 880000,
                 "visit": 99,
                 "stock": 9994,
@@ -24,7 +24,7 @@
             },
             {
                 "commodityNo": "0000003",
-                "commodityNmae": "空调",
+                "commodityName": "空调",
                 "price": 400400,
                 "visit": 99,
                 "stock": 9994,
@@ -34,7 +34,7 @@
             },
             {
                 "commodityNo": "0000004",
-                "commodityNmae": "油烟机",
+                "commodityName": "油烟机",
                 "price": 200500,
                 "visit": 998889,
                 "stock": 9994,
@@ -44,7 +44,7 @@
             },
             {
                 "commodityNo": "0000005",
-                "commodityNmae": "iphone XS",
+                "commodityName": "iphone XS",
                 "price": 1050000,
                 "visit": 998889,
                 "stock": 9994,
@@ -54,7 +54,7 @@
             },
             {
                 "commodityNo": "0000001",
-                "commodityNmae": "彩电",
+                "commodityName": "彩电",
                 "price": 9999999,
                 "visit": 99,
                 "stock": 999,
@@ -64,7 +64,7 @@
             },
             {
                 "commodityNo": "0000002",
-                "commodityNmae": "冰箱",
+                "commodityName": "冰箱",
                 "price": 880000,
                 "visit": 99,
                 "stock": 9994,
@@ -74,7 +74,7 @@
             },
             {
                 "commodityNo": "0000003",
-                "commodityNmae": "空调",
+                "commodityName": "空调",
                 "price": 400400,
                 "visit": 99,
                 "stock": 9994,
@@ -84,7 +84,7 @@
             },
             {
                 "commodityNo": "0000004",
-                "commodityNmae": "油烟机",
+                "commodityName": "油烟机",
                 "price": 200500,
                 "visit": 998889,
                 "stock": 9994,
@@ -94,7 +94,7 @@
             },
             {
                 "commodityNo": "0000005",
-                "commodityNmae": "iphone XS",
+                "commodityName": "iphone XS",
                 "price": 1050000,
                 "visit": 998889,
                 "stock": 9994,

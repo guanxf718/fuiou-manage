@@ -6,7 +6,7 @@ const tableHeader = () => {
     let array = [
         { prop: 'no', label: 'ID' },
         { prop: 'commodityNo', label: '商品编号' },
-        { prop: 'commodityNmae', label: '商品名称' },
+        { prop: 'commodityName', label: '商品名称' },
         { prop: 'price', label: '价格' },
         { prop: 'visit', label: '访问量' },
         { prop: 'stock', label: '库存' },
@@ -21,8 +21,8 @@ const tableHeader = () => {
             prop: 'option',
             label: '操作',
             operations: [
-                { label: '编辑', func: 'edit', type: 'warning' },
-                { label: '推广', func: 'extension', type: 'primary' },
+                { label: '编辑', func: 'edit', type: 'warning', inquiry: false },
+                { label: '推广', func: 'extension', type: 'primary', inquiry: false },
             ],
             width: 150
         }
@@ -40,7 +40,7 @@ const tableBody = (data) => {
         obj = {
             no: ~~(index + 1),
             commodityNo: el.commodityNo,
-            commodityNmae: el.commodityNmae,
+            commodityName: el.commodityName,
             price: utils.formatPrice(el.price),
             visit: el.visit,
             stock: el.stock,

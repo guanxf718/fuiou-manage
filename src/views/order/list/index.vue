@@ -1,9 +1,11 @@
 <template>
-    <form-template ref="searchForm" :inner-obj="innerObj" v-model="original"></form-template>
+    <form-template ref="searchForm" :inner-obj="innerObj" v-model="original">
+        <order-details ref="orderDetails" slot="dialogs"></order-details>
+    </form-template>
 </template>
 
 <script>
-import { FormTemplate } from "@/components";
+import { FormTemplate, OrderDetails } from "@/components";
 import Format from "./format.js";
 export default {
     data() {
@@ -57,8 +59,13 @@ export default {
                 ],
                 // 批量操作按钮
                 buttonList: [
-                    { label: '导出EXCEL', func: 'export', type: 'primary' },
-                ]
+                    { label: '导出EXCEL', func: 'export', type: 'primary', inquiry: true },
+                ],
+                // 所需字段
+                field: {
+                    id: 'orderNo',
+                    name: 'orderNo'
+                }
             },
             original: {
                 watch: {
@@ -82,6 +89,8 @@ export default {
                     inputValue: '',
                 },
             },
+            quantityId: [],
+            quantityName: []
         }
     },
     mounted() {
@@ -90,6 +99,9 @@ export default {
         this.getTableHeader();
     },
     methods: {
+        /**
+         * 获取表头
+         */
         getTableHeader() {
             this.innerObj.dataList.dataHead = Format.tableHeader();
         },
@@ -113,21 +125,29 @@ export default {
             });
         },
         /**
-         * 操作分发
+         * 询问
          */
-        operations(row, func) {
+        needToAsk(row, func, label) {
+            switch (func) {
+                // 删除 
+                case 'delete':
+                    this.operationsDelete(row, label);
+                    break;
+                //导出
+                case 'export':
+                    this.operationsExport(label);
+                    break;
+                default: break;
+            }
+        },
+        /**
+         * 不询问
+         */
+        noNeedToAsk(row, func) {
             switch (func) {
                 // 详情
                 case 'details':
                     this.operationsDetails(row);
-                    break;
-                // 删除 
-                case 'delete':
-                    this.operationsDelete(row);
-                    break;
-                //导出
-                case 'export':
-                    this.operationsExport(row);
                     break;
                 default: break;
             }
@@ -136,23 +156,39 @@ export default {
          * 详情
          */
         operationsDetails(el) {
-            console.log('详情');
+            this.$refs.orderDetails.dialogVisible = true;
         },
         /**
          * 删除
          */
-        operationsDelete(el) {
-            console.log('删除');
+        operationsDelete(label) {
+            let vm = this;
+            let params = {};
+            return this.$root.commonCall("deleteService", params, {
+                success() {
+                    vm.$message.success(`${label}成功！`);
+                    vm.searchData();
+                },
+                failMsg: `${label}失败！`
+            });
         },
         /**
          * 导出
          */
-        operationsExport() {
-            console.log('导出');
+        operationsExport(label) {
+            let vm = this;
+            let params = {};
+            return this.$root.commonCall("deleteService", params, {
+                success() {
+                    vm.$message.success(`${label}成功！`);
+                    vm.searchData();
+                },
+                failMsg: `${label}失败！`
+            });
         }
     },
     components: {
-        FormTemplate
+        FormTemplate, OrderDetails
     }
 }
 </script>

@@ -9,10 +9,14 @@ const FormTemplate = () =>
 const AppBreadcrumb = () =>
     import ('./appBreadcrumb/index.vue');
 
+const OrderDetails = () =>
+    import ('./appDialogs/orderDetails/index.vue');
+
 module.exports = {
     AppLayout,
     AppMenu,
     AppHeader,
     FormTemplate,
-    AppBreadcrumb
+    AppBreadcrumb,
+    OrderDetails
 };

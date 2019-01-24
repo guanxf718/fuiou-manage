@@ -15,6 +15,9 @@ export default (axios, config) => {
         },
         commodityGrou(data = {}) {
             return axios.get('/data/commodityGrou.json', data);
+        },
+        deleteService(data = {}) {
+            return axios.get('/data/commodityGrou.json', data);
         }
     };
 };

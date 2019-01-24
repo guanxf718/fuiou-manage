@@ -46,11 +46,16 @@ export default {
                 },
                 // 批量操作按钮
                 buttonList: [
-                    { label: '上架', func: 'onShelf', type: 'primary' },
-                    { label: '下架', func: 'offShelf', type: 'primary' },
-                    { label: '分组', func: 'grou', type: 'success' },
-                    { label: '删除', func: 'delete', type: 'danger' },
-                ]
+                    { label: '上架', func: 'onShelf', type: 'primary', inquiry: true },
+                    { label: '下架', func: 'offShelf', type: 'primary', inquiry: true },
+                    { label: '分组', func: 'grou', type: 'success', inquiry: true },
+                    { label: '删除', func: 'delete', type: 'danger', inquiry: true },
+                ],
+                // 所需展示字段
+                field: {
+                    id: 'commodityNo',
+                    name: 'commodityName'
+                }
             },
             original: {
                 watch: {
@@ -74,6 +79,8 @@ export default {
             },
             // 批量操作选中列表
             quantity: [],
+            quantityId: [],
+            quantityName: []
         }
     },
     mounted() {
@@ -82,6 +89,9 @@ export default {
         this.getTableHeader();
     },
     methods: {
+        /**
+         * 获取表头
+         */
         getTableHeader() {
             this.innerObj.dataList.dataHead = Format.tableHeader();
         },
@@ -105,30 +115,37 @@ export default {
             });
         },
         /**
-         * 操作分发
+         * 需要询问
          */
-        operations(row, func) {
-            console.log(this.quantity);
+        needToAsk(row, func, label) {
             switch (func) {
-                // 编辑
-                case 'edit':
-                    this.operationsEdit(row);
-                    break;
                 // 删除 
                 case 'delete':
-                    this.operationsDelete();
+                    this.operationsDelete(this.quantity, label);
                     break;
                 // 上架
                 case 'onShelf':
-                    this.operationsShelf('01');
+                    this.operationsShelf('01', label);
                     break;
                 // 下架
                 case 'offShelf':
-                    this.operationsShelf('00');
+                    this.operationsShelf('00', label);
                     break;
                 // 分组
                 case 'grou':
                     this.operationsGrou();
+                    break;
+                default: break;
+            }
+        },
+        /**
+         * 不需要需要询问
+         */
+        noNeedToAsk(row, func, label) {
+            switch (func) {
+                // 编辑
+                case 'edit':
+                    this.operationsEdit(row);
                     break;
                 // 推广
                 case 'extension':
@@ -155,14 +172,30 @@ export default {
         /**
          * 删除
          */
-        operationsDelete() {
-            console.log('删除订单');
+        operationsDelete(quantity, label) {
+            let vm = this;
+            let params = {};
+            return this.$root.commonCall("deleteService", params, {
+                success() {
+                    vm.$message.success(`${label}成功！`);
+                    vm.searchData();
+                },
+                failMsg: `${label}失败！`
+            });
         },
         /**
          * 上架
          */
-        operationsShelf(v) {
-            console.log('上下架');
+        operationsShelf(quantity, label) {
+            let vm = this;
+            let params = {};
+            return this.$root.commonCall("deleteService", params, {
+                success() {
+                    vm.$message.success(`${label}成功！`);
+                    vm.searchData();
+                },
+                failMsg: `${label}失败！`
+            });
         },
         /**
          * 分组

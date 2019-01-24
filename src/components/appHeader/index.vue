@@ -71,10 +71,6 @@ export default {
 <style lang="scss" scoped>
 .content {
     @include flex-nowrap;
-    & > div {
-        height: $lineHeight-l;
-        line-height: $lineHeight-l;
-    }
     .left {
         width: $menu-weight;
         font-size: $text-xxl;
@@ -89,7 +85,7 @@ export default {
         div:first-child {
             i {
                 font-size: $text-xxl;
-                line-height: $lineHeight-l;
+                line-height: $lineHeight-ml;
                 cursor: pointer;
             }
             .hamburger {

@@ -39,7 +39,7 @@
                     v-for="el in innerObj.buttonList"
                     :key="el.index"
                     :type="el.type"
-                    @click="operations('',el.func)"
+                    @click="operations('',el.func,el.label,el.inquiry)"
                 >{{el.label}}</el-button>
                 <el-button
                     v-if="innerObj.condition.add"
@@ -69,7 +69,7 @@
                                 v-for="o in v.operations"
                                 :key="o.index"
                                 size="small"
-                                @click="operations(scope.row,o.func)"
+                                @click="operations(scope.row,o.func,o.label,o.inquiry)"
                                 :type="o.type"
                             >{{o.label}}</el-button>
                         </template>
@@ -87,6 +87,7 @@
                 :total="originalFree.rowCount"
             ></el-pagination>
         </div>
+        <slot name="dialogs"></slot>
     </div>
 </template>
 
@@ -105,11 +106,10 @@ export default {
     data() {
         return {
             originalWatch: this.value.watch,
-            originalFree: this.value.free
+            originalFree: this.value.free,
         }
     },
     methods: {
-
         /**
          * 分页
          */
@@ -118,10 +118,62 @@ export default {
             this.$parent.searchData();
         },
         /**
-         * 操作按钮
+         * 按键分发
          */
-        operations(row, func) {
-            this.$parent.operations(row, func);
+        operations(row, func, label, inquiry) {
+            if (this.fileterSelection(row)) {
+                if (inquiry) {
+                    this.$confirm(`确定${label} 「${this.$parent.quantityName.join('，')}」 ${this.innerObj.pageTitle}？`, `${label}`).then(
+                        confirm => {
+                            this.$parent.needToAsk(row, func, label);
+                        },
+                        cancel => {
+                            this.$loading.close();
+                        }
+                    );
+                } else {
+                    this.$parent.noNeedToAsk(row, func);
+                }
+            }
+        },
+        /**
+         * 是否选择批量操作的数据
+         */
+        fileterSelection(row) {
+            if (this.innerObj.condition.type == 'selection') {
+                if (!this.$parent.quantity.length && !row) {
+                    this.$message.warning(`请选择需要操作的${this.innerObj.pageTitle}！`);
+                    return false;
+                } else {
+                    // 批量数据处理
+                    this.setQuantity(row);
+                    return true;
+                }
+            } else {
+                this.$parent.quantityId = [row[this.innerObj.field.id]];
+                this.$parent.quantityName = [row[this.innerObj.field.name]];
+                return true;
+            }
+        },
+        /**
+         * 数组处理
+         */
+        setQuantity(row) {
+            let field = this.innerObj.field,
+                id = this.$parent.quantityId = [],
+                name = this.$parent.quantityName = [];
+            this.$parent.quantity.forEach((el, index, slef) => {
+                for (const key in el) {
+                    if (el.hasOwnProperty(key)) {
+                        if (key == field.id) {
+                            id.push(el[key]);
+                        }
+                        if (key == field.name) {
+                            name.push(el[key]);
+                        }
+                    }
+                }
+            });
         },
         /**
          * 新增

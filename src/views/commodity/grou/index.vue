@@ -21,6 +21,11 @@ export default {
                 dataList: {
                     dataHead: {},
                     dataBody: []
+                },
+                // 所需字段
+                field: {
+                    id: 'grouId',
+                    name: 'grouName'
                 }
             },
             original: {
@@ -39,6 +44,8 @@ export default {
                     inputValue: '',
                 },
             },
+            quantityId: [],
+            quantityName: []
         }
     },
     mounted() {
@@ -70,17 +77,25 @@ export default {
             });
         },
         /**
-         * 操作分发
+         * 询问
          */
-        operations(row, func) {
+        needToAsk(row, func) {
+            switch (func) {
+                // 删除 
+                case 'delete':
+                    this.operationsDelete(row);
+                    break;
+                default: break;
+            }
+        },
+        /**
+         * 不询问
+         */
+        noNeedToAsk(row, func) {
             switch (func) {
                 // 编辑
                 case 'edit':
                     this.operationsEdit(row);
-                    break;
-                // 删除 
-                case 'delete':
-                    this.operationsDelete();
                     break;
                 default: break;
             }
@@ -100,8 +115,16 @@ export default {
                 failMes: `获取${vm.pageTitle}失败！`
             });
         },
-        operationsDelete(){
-            console.log('删除');
+        operationsDelete() {
+            let vm = this;
+            let params = {};
+            return this.$root.commonCall("deleteService", params, {
+                success() {
+                    vm.$message.success(`删除成功！`);
+                    vm.searchData();
+                },
+                failMsg: `删除失败！`
+            });
         },
         /**
          * 新增

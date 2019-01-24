@@ -34,6 +34,8 @@ export default {
 .el-header {
     padding-left: 0;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    height: $lineHeight-ml!important;
+    line-height: $lineHeight-ml!important;
 }
 .el-aside {
     background-color: $color-nav-bg;

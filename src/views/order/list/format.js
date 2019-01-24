@@ -22,8 +22,8 @@ const tableHeader = () => {
             prop: 'option',
             label: '操作',
             operations: [
-                { label: '详情', func: 'details', type: 'primary' },
-                { label: '删除', func: 'delete', type: 'danger' },
+                { label: '详情', func: 'details', type: 'primary', inquiry: false },
+                { label: '删除', func: 'delete', type: 'danger', inquiry: true },
             ],
             width: 150
         }
