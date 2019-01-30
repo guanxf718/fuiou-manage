@@ -12,9 +12,7 @@ axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest';
 let getDefaultParam = config.getDefaultParam = () => {
     let defaultParam = {};
     if (store.getters.userInfo) {
-        defaultParam = {
-            token: store.getters.userInfo.userToken,
-        };
+        defaultParam = {};
     }
     return {
         param: defaultParam,
@@ -32,9 +30,12 @@ axios.interceptors.request.use(config => {
     if (isPost) {
         if (config.requestType == 'payload') {
             config.headers['Content-Type'] = 'application/json;charset=UTF-8';
-        } else {
+        } else if (config.requestType == 'formData') {
             config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
             config.data = qs.stringify(config.data)
+        } else {
+            config.headers['Content-Type'] = 'application/json;charset=UTF-8';
+            config.headers['Authorization'] = store.getters.userInfo.userToken;
         }
     }
     return config;

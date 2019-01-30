@@ -41,9 +41,22 @@ export default {
                 service[serviceName](params)
                     .then(
                         res => {
-                            if (res.data.resultCode) {
-                                callback && callback.success && callback.success(res.data.data);
-                                resolve();
+                            if (res.data.respCode) {
+                                let code = res.data.respCode;
+                                switch (code) {
+                                    case 'TK04':
+                                        this.$message.warning(
+                                            res.data.message ||
+                                            (callback ? callback.failMsg : null) ||
+                                            "登录已失效，请重新登录！"
+                                        );
+                                        // this.$router.push({ name: 'login' });
+                                        break;
+                                    default:
+                                        callback && callback.success && callback.success(res.data.data);
+                                        resolve();
+                                        break;
+                                }
                             } else {
                                 if (callback && callback.fail) {
                                     callback.fail(res);

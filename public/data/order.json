@@ -1087,6 +1087,6 @@
             }
         ]
     },
-    "resultCode": "000000",
-    "resultMsg": "成功"
+    "respCode": "0000",
+    "respDesc": "成功"
 }

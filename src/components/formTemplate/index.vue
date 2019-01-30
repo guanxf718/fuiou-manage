@@ -39,8 +39,17 @@
                     v-for="el in innerObj.buttonList"
                     :key="el.index"
                     :type="el.type"
-                    @click="operations('',el.func,el.label,el.inquiry)"
+                    @click="operations('',el)"
                 >{{el.label}}</el-button>
+                <download-excel
+                    v-if="innerObj.condition.excel"
+                    :data="innerObj.excelData.jsonData"
+                    :fields="innerObj.excelData.jsonFields"
+                    :name="innerObj.excelData.fileName"
+                    class="excel"
+                >
+                    <el-button type="primary">导出EXCEL</el-button>
+                </download-excel>
                 <el-button
                     v-if="innerObj.condition.add"
                     type="primary"
@@ -69,7 +78,7 @@
                                 v-for="o in v.operations"
                                 :key="o.index"
                                 size="small"
-                                @click="operations(scope.row,o.func,o.label,o.inquiry)"
+                                @click="operations(scope.row,o)"
                                 :type="o.type"
                             >{{o.label}}</el-button>
                         </template>
@@ -107,6 +116,7 @@ export default {
         return {
             originalWatch: this.value.watch,
             originalFree: this.value.free,
+            confirmQuestion: ''
         }
     },
     methods: {
@@ -120,20 +130,19 @@ export default {
         /**
          * 按键分发
          */
-        operations(row, func, label, inquiry) {
+        operations(row, el) {
             if (this.fileterSelection(row)) {
-                if (inquiry) {
-                    console.log(this.$parent.quantityName);
-                    this.$confirm(`确定${label} 「${this.$parent.quantityName.join('，')}」 ${this.innerObj.pageTitle}？`, `${label}`).then(
+                if (el.inquiry) {
+                    this.$confirm(`确定${el.label} 「${this.confirmQuestion}」 ${this.innerObj.pageTitle}？`, `${el.label}`).then(
                         confirm => {
-                            this.$parent.needToAsk(row, func, label);
+                            this.$parent.needToAsk(row, el);
                         },
                         cancel => {
                             this.$loading.close();
                         }
                     );
                 } else {
-                    this.$parent.noNeedToAsk(row, func);
+                    this.$parent.noNeedToAsk(row, el);
                 }
             }
         },
@@ -142,11 +151,10 @@ export default {
          */
         fileterSelection(row) {
             if (row) {
-                this.$parent.quantityId = [row[this.innerObj.field.id]];
-                this.$parent.quantityName = [row[this.innerObj.field.name]];
+                this.confirmQuestion = [row[this.innerObj.field.name]];
                 return true;
             } else {
-                if (this.$parent.quantity.length) {
+                if (this.$parent.quantity.slef.length) {
                     // 批量数据处理
                     this.setQuantity(row);
                     return true;
@@ -161,9 +169,9 @@ export default {
          */
         setQuantity(row) {
             let field = this.innerObj.field,
-                id = this.$parent.quantityId = [],
-                name = this.$parent.quantityName = [];
-            this.$parent.quantity.forEach((el, index, slef) => {
+                id = this.$parent.quantity.id = [],
+                name = this.$parent.quantity.name = [];
+            this.$parent.quantity.slef.forEach((el, index, slef) => {
                 for (const key in el) {
                     if (el.hasOwnProperty(key)) {
                         if (key == field.id) {
@@ -175,6 +183,7 @@ export default {
                     }
                 }
             });
+            this.confirmQuestion = name.join('，');
         },
         /**
          * 新增
@@ -192,7 +201,7 @@ export default {
          * 选择框
          */
         handleSelectionChange(val) {
-            this.$parent.quantity = val;
+            this.$parent.quantity.slef = val;
         }
     },
     watch: {
@@ -210,6 +219,9 @@ export default {
 .table-wrapper {
     @include flex-column;
     > div {
+        .excel {
+            display: inline-block;
+        }
         &.search-header {
             min-height: 40px;
             @include flex-nowrap;

@@ -6,7 +6,7 @@
 
 <script>
 import { FormTemplate, AddGroup } from "@/components";
-import Format from "./format.js";
+import utils from '@/utils/utils'
 export default {
     data() {
         return {
@@ -46,8 +46,6 @@ export default {
                     inputValue: '',
                 },
             },
-            quantityId: [],
-            quantityName: []
         }
     },
     mounted() {
@@ -57,7 +55,35 @@ export default {
     },
     methods: {
         getTableHeader() {
-            this.innerObj.dataList.dataHead = Format.tableHeader();
+            this.innerObj.dataList.dataHead = [
+                { prop: 'grouId', label: '分组编号' },
+                { prop: 'grouName', label: '分组名称' },
+                { prop: 'commodityNumber', label: '商品数' },
+                { prop: 'creationTime', label: '创建时间', width: 120 },
+                {
+                    prop: 'option',
+                    label: '操作',
+                    operations: [
+                        { label: '编辑', func: 'edit', type: 'success', inquiry: false },
+                        { label: '删除', func: 'delete', type: 'danger', inquiry: true },
+                    ],
+                    width: 150
+                }
+            ];
+        },
+        getTableBody(data) {
+            let arry = [],
+                obj = {};
+            data.dataList.forEach(el => {
+                obj = {
+                    grouId: el.grouId,
+                    grouName: el.grouName,
+                    commodityNumber: el.commodityNumber,
+                    creationTime: el.creationTime
+                }
+                arry.push(utils.formatTh(obj));
+            });
+            return arry;
         },
         /**
          * 搜索订单列表
@@ -70,7 +96,7 @@ export default {
                 }
             vm.$root.commonCall("getCommodityGrou", params, {
                 success(res) {
-                    vm.innerObj.dataList.dataBody = Format.tableBody(res);
+                    vm.innerObj.dataList.dataBody = vm.getTableBody(res);
                     vm.original.free.pageCount = res.pageCount;
                     vm.original.free.rowCount = res.rowCount;
                 },
@@ -80,8 +106,8 @@ export default {
         /**
          * 询问
          */
-        needToAsk(row, func) {
-            switch (func) {
+        needToAsk(row, el) {
+            switch (el.func) {
                 // 删除 
                 case 'delete':
                     this.operationsDelete(row);
@@ -92,8 +118,8 @@ export default {
         /**
          * 不询问
          */
-        noNeedToAsk(row, func) {
-            switch (func) {
+        noNeedToAsk(row, el) {
+            switch (el.func) {
                 // 编辑
                 case 'edit':
                     this.operationsEdit(row);

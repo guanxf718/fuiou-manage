@@ -6,7 +6,7 @@
 
 <script>
 import { FormTemplate, ExtendedCode } from "@/components";
-import Format from "./format.js";
+import utils from '@/utils/utils'
 export default {
     data() {
         return {
@@ -56,7 +56,7 @@ export default {
                 field: {
                     id: 'commodityNo',
                     name: 'commodityName'
-                }
+                },
             },
             original: {
                 watch: {
@@ -78,10 +78,11 @@ export default {
                     inputValue: '',
                 },
             },
-            // 批量操作选中列表
-            quantity: [],
-            quantityId: [],
-            quantityName: []
+            quantity: {
+                slef: [],
+                id: [],
+                name: []
+            }
         }
     },
     mounted() {
@@ -94,7 +95,50 @@ export default {
          * 获取表头
          */
         getTableHeader() {
-            this.innerObj.dataList.dataHead = Format.tableHeader();
+            this.innerObj.dataList.dataHead = [
+                { prop: 'no', label: 'ID' },
+                { prop: 'commodityNo', label: '商品编号' },
+                { prop: 'commodityName', label: '商品名称' },
+                { prop: 'price', label: '价格' },
+                { prop: 'visit', label: '访问量' },
+                { prop: 'stock', label: '库存' },
+                { prop: 'sales', label: '总销量' },
+                { prop: 'upperLower', label: '上下架' },
+                {
+                    prop: 'creationTime',
+                    label: '创建时间',
+                    width: 120
+                },
+                {
+                    prop: 'option',
+                    label: '操作',
+                    operations: [
+                        { label: '编辑', func: 'edit', type: 'success', inquiry: false },
+                        { label: '推广', func: 'extension', type: 'primary', inquiry: false },
+                        { label: '删除', func: 'delete', type: 'danger', inquiry: true },
+                    ],
+                    width: 210
+                }
+            ];
+        },
+        getTableBody(data) {
+            let arry = [],
+                obj = {};
+            data.dataList.forEach((el, index) => {
+                obj = {
+                    no: ~~(index + 1),
+                    commodityNo: el.commodityNo,
+                    commodityName: el.commodityName,
+                    price: utils.formatPrice(el.price),
+                    visit: el.visit,
+                    stock: el.stock,
+                    sales: el.sales,
+                    upperLower: el.upperLower == '01' ? '已上架' : '未上架',
+                    creationTime: el.creationTime
+                }
+                arry.push(utils.formatTh(obj));
+            });
+            return arry;
         },
         /**
          * 搜索订单列表
@@ -105,10 +149,10 @@ export default {
                     ...vm.original.watch,
                     ...vm.original.free
                 }
-            console.log(params);
+            // console.log(params);
             vm.$root.commonCall("getCommodityList", params, {
                 success(res) {
-                    vm.innerObj.dataList.dataBody = Format.tableBody(res);
+                    vm.innerObj.dataList.dataBody = vm.getTableBody(res);
                     vm.original.pageCount = res.pageCount;
                     vm.original.rowCount = res.rowCount;
                 },
@@ -118,19 +162,19 @@ export default {
         /**
          * 需要询问
          */
-        needToAsk(row, func, label) {
-            switch (func) {
+        needToAsk(row, el) {
+            switch (el.func) {
                 // 删除 
                 case 'delete':
-                    this.operationsDelete(row, label);
+                    this.operationsDelete(row, el.label);
                     break;
                 // 上架
                 case 'onShelf':
-                    this.operationsShelf('01', label);
+                    this.operationsShelf('01', el.label);
                     break;
                 // 下架
                 case 'offShelf':
-                    this.operationsShelf('00', label);
+                    this.operationsShelf('00', el.label);
                     break;
                 // 分组
                 case 'grou':
@@ -142,8 +186,8 @@ export default {
         /**
          * 不需要需要询问
          */
-        noNeedToAsk(row, func, label) {
-            switch (func) {
+        noNeedToAsk(row, el) {
+            switch (el.func) {
                 // 编辑
                 case 'edit':
                     this.operationsEdit(row);
@@ -178,10 +222,10 @@ export default {
         /**
          * 上架
          */
-        operationsShelf(quantity, label) {
+        operationsShelf(type, label) {
             let vm = this;
             let params = {
-                quantityId: this.quantityId
+                quantityId: this.quantity.id
             };
             return this.$root.commonCall("deleteService", params, {
                 success() {

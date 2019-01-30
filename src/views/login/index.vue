@@ -5,7 +5,7 @@
             <section>
                 <ul class="input-section-box">
                     <li>
-                        <el-input placeholder="请输入登录账号" v-model="loginInfo.username">
+                        <el-input placeholder="请输入登录账号" v-model="loginInfo.userName">
                             <template slot="prepend">
                                 <i class="icon-shuaqia iconfont"></i>
                             </template>
@@ -45,8 +45,8 @@ export default {
             },
             // 登录账号密码
             loginInfo: {
-                username: "guanxiufeng",
-                password: "123123",
+                userName: "a",
+                password: "12345",
             },
             // 回车登录
             isEnterLogin: false
@@ -58,7 +58,7 @@ export default {
         paramCheck() {
             let res = { status: false, msg: "" };
             res.status = !(
-                (!this.loginInfo.username && (res.msg = "账号信息为空！")) ||
+                (!this.loginInfo.userName && (res.msg = "账号信息为空！")) ||
                 (!this.loginInfo.password && (res.msg = "密码为空！"))
             );
             return res;
@@ -69,11 +69,16 @@ export default {
             if (!paramCheck.status) {
                 return this.$message.warning(paramCheck.msg);
             }
+            this.$loading.open();
             service
                 .doUserLogin({ ...this.loginInfo })
                 .then(
                     res => {
-                        if (res.data && res.data.resultCode == "000000") {
+                        if (res.data && res.data.respCode == "0000") {
+                            res.data.data = {
+                                account: this.loginInfo.userName,
+                                userToken: res.headers.authorization
+                            }
                             this.setUserInfoAction(res.data.data);
                             this.$router.replace({
                                 name: this.redirectInfo.name,

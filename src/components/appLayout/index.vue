@@ -49,6 +49,7 @@ export default {
             &:nth-child(2) {
                 flex-grow: 1;
                 height: 80%;
+                overflow-y: scroll;
             }
         }
     }

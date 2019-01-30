@@ -1,7 +1,7 @@
 const CONFIG = {
     // 测试环境
     development: {
-        host: '192.168.22.89:80',
+        host: '',
     },
     // 模拟环境
     staging: {

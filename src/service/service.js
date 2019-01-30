@@ -2,11 +2,12 @@
 export default (axios, config) => {
     return {
         doUserLogin(data = {}) {
-            return axios.get(`data/login.json`, data);
-            // return axios.post(`${config.host}/login.fuiou`, data);
+            // return axios.get(`data/login.json`, data);
+            return axios.post(`/api/login.fuiou`, data, { requestType: 'payload' });
         },
         getOrderList(data = {}) {
-            return axios.get('/data/order.json', data);
+            // return axios.get('/data/order.json', data);
+            return axios.post('/api/order/query.fuiou', data);
         },
         getCommodityList(data = {}) {
             return axios.get('/data/commodityList.json', data);

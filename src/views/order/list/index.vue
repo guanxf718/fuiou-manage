@@ -6,7 +6,7 @@
 
 <script>
 import { FormTemplate, OrderDetails } from "@/components";
-import Format from "./format.js";
+import utils from '@/utils/utils'
 export default {
     data() {
         return {
@@ -16,6 +16,7 @@ export default {
                 condition: {
                     input: true,
                     date: true,
+                    excel: true,
                     type: 'index',
                 },
                 // 数据列表
@@ -57,14 +58,16 @@ export default {
                         ]
                     },
                 ],
-                // 批量操作按钮
-                buttonList: [
-                    { label: '导出EXCEL', func: 'export', type: 'primary', inquiry: true },
-                ],
                 // 所需字段
                 field: {
                     id: 'orderNo',
                     name: 'orderNo'
+                },
+                // 倒出excel
+                excelData: {
+                    jsonData: [],
+                    jsonFields: {},
+                    fileName: 'order.xls'
                 }
             },
             original: {
@@ -89,8 +92,6 @@ export default {
                     inputValue: '',
                 },
             },
-            quantityId: [],
-            quantityName: []
         }
     },
     mounted() {
@@ -103,7 +104,49 @@ export default {
          * 获取表头
          */
         getTableHeader() {
-            this.innerObj.dataList.dataHead = Format.tableHeader();
+            this.innerObj.dataList.dataHead = [
+                { prop: 'orderNo', label: '订单号', width: 120 },
+                { prop: 'orderType', label: '订单类型' },
+                { prop: 'orderAmt', label: '原价' },
+                { prop: 'orderDisAmt', label: '优惠价' },
+                { prop: 'couponAmt', label: '优惠券' },
+                { prop: 'integralDeductionAmt', label: '积分抵扣' },
+                { prop: 'expressAmt', label: '快递费' },
+                { prop: 'payAmt', label: '支付金额' },
+                { prop: 'payType', label: '支付类型' },
+                { prop: 'expressId', label: '快递单号', width: 90 },
+                { prop: 'payTm', label: '支付时间', width: 150 },
+                {
+                    prop: 'option',
+                    label: '操作',
+                    operations: [
+                        // { label: '详情', func: 'details', type: 'primary', inquiry: false },
+                        { label: '删除', func: 'delete', type: 'danger', inquiry: true },
+                    ],
+                    width: 80
+                }
+            ];
+        },
+        getTableBody(data) {
+            let arry = [],
+                obj = {};
+            data.forEach(el => {
+                obj = {
+                    orderNo: el.orderNo,
+                    orderType: el.orderType == '01' ? '堂吃订单' : '外卖订单',
+                    orderAmt: utils.formatPrice(el.orderAmt),
+                    orderDisAmt: utils.formatPrice(el.orderDisAmt),
+                    couponAmt: utils.formatPrice(el.couponAmt),
+                    expressAmt: utils.formatPrice(el.expressAmt),
+                    payAmt: utils.formatPrice(el.payAmt),
+                    payType: el.payType == 'LETPAY' ? '微信支付' : '会员卡支付',
+                    payTm: el.payTm,
+                    integralDeductionAmt: utils.formatPrice(el.integralDeductionAmt),
+                    expressId: el.expressId,
+                }
+                arry.push(utils.formatTh(obj));
+            });
+            return arry;
         },
         /**
          * 搜索订单列表
@@ -111,13 +154,13 @@ export default {
         searchData() {
             let vm = this;
             let params = {
-                ...vm.original.watch,
-                ...vm.original.free
+                // ...vm.original.watch,
+                // ...vm.original.free,
+                orderNo: '10000761'
             }
-            console.log(params);
             vm.$root.commonCall("getOrderList", params, {
                 success(res) {
-                    vm.innerObj.dataList.dataBody = Format.tableBody(res);
+                    vm.innerObj.dataList.dataBody = vm.getTableBody(res);
                     vm.original.pageCount = res.pageCount;
                     vm.original.rowCount = res.rowCount;
                 },
@@ -127,15 +170,15 @@ export default {
         /**
          * 询问
          */
-        needToAsk(row, func, label) {
-            switch (func) {
+        needToAsk(row, el) {
+            switch (el.func) {
                 // 删除 
                 case 'delete':
-                    this.operationsDelete(row, label);
+                    this.operationsDelete(row, el.label);
                     break;
                 //导出
                 case 'export':
-                    this.operationsExport(label);
+                    this.operationsExport(el.label);
                     break;
                 default: break;
             }
@@ -143,8 +186,8 @@ export default {
         /**
          * 不询问
          */
-        noNeedToAsk(row, func) {
-            switch (func) {
+        noNeedToAsk(row, el) {
+            switch (el.func) {
                 // 详情
                 case 'details':
                     this.operationsDetails(row);

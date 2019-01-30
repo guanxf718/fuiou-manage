@@ -6,7 +6,7 @@ export default {
     setUserInfoAction({ commit }, userInfo) {
         if (userInfo) {
             VueCookie.set('userName', userInfo.userName, 'HTTPOnly', 1000);
-            VueCookie.set('userToken', userInfo.token, 'HTTPOnly', 1000);
+            VueCookie.set('userToken', userInfo.userToken, 'HTTPOnly', 1000);
             utils.setStore('userInfo', userInfo);
             commit('UPDATE_USER_INFO', userInfo);
         }
@@ -34,8 +34,8 @@ export default {
         const USER_INFO = utils.getStore('userInfo');
         let now = new Date().getTime();
         let diff = 1 * 60 * 60 * 1000; // 一小时过期
-        utils.setStore('userToken', USER_INFO.token);
+        utils.setStore('userToken', USER_INFO.userToken);
         utils.setStore('tokenExpire', (diff + now));
-        commit('UPDATE_USER_INFO', { userToken: USER_INFO.token });
+        commit('UPDATE_USER_INFO', { userToken: USER_INFO.userToken });
     },
 };

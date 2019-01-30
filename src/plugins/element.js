@@ -28,7 +28,9 @@ import {
     OptionGroup,
     Breadcrumb,
     BreadcrumbItem,
-    Dialog
+    Dialog,
+    Form,
+    FormItem
 } from 'element-ui'
 
 Vue.use(Button)
@@ -57,8 +59,9 @@ Vue.use(Button)
     .use(Loading)
     .use(Breadcrumb)
     .use(BreadcrumbItem)
-    .use(Dialog);
-
+    .use(Dialog)
+    .use(Form)
+    .use(FormItem);
 Vue.component(Message.name, Message);
 Vue.component(MessageBox.name, MessageBox);
 

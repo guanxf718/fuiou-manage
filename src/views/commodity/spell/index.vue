@@ -6,7 +6,7 @@
 
 <script>
 import { FormTemplate, ExtendedCode } from "@/components";
-import Format from "./format.js";
+import utils from '@/utils/utils'
 export default {
     data() {
         return {
@@ -46,9 +46,6 @@ export default {
                     inputValue: '',
                 },
             },
-            // 批量操作选中列表
-            quantityId: [],
-            quantityName: []
         }
     },
     mounted() {
@@ -61,7 +58,37 @@ export default {
          * 获取表头
          */
         getTableHeader() {
-            this.innerObj.dataList.dataHead = Format.tableHeader();
+            this.innerObj.dataList.dataHead = [
+                { prop: 'spellName', label: '活动名称' },
+                { prop: 'state', label: '活动状态' },
+                { prop: 'startTime', label: '起始时间' },
+                { prop: 'endTime', label: '结束时间' },
+                {
+                    prop: 'option',
+                    label: '操作',
+                    operations: [
+                        { label: '编辑', func: 'edit', type: 'success', inquiry: false },
+                        { label: '推广', func: 'extension', type: 'primary', inquiry: false },
+                        { label: '失效', func: 'invalid', type: 'warning', inquiry: true },
+                        { label: '删除', func: 'delete', type: 'danger', inquiry: true },
+                    ],
+                    width: 280
+                }
+            ];
+        },
+        getTableBody(data) {
+            let arry = [],
+                obj = {};
+            data.dataList.forEach(el => {
+                obj = {
+                    spellName: el.spellName,
+                    state: el.state,
+                    startTime: el.startTime,
+                    endTime: el.endTime
+                }
+                arry.push(utils.formatTh(obj));
+            });
+            return arry;
         },
         /**
          * 搜索拼团列表
@@ -72,10 +99,9 @@ export default {
                     ...vm.original.watch,
                     ...vm.original.free
                 }
-            console.log(params);
             vm.$root.commonCall("getSpellList", params, {
                 success(res) {
-                    vm.innerObj.dataList.dataBody = Format.tableBody(res);
+                    vm.innerObj.dataList.dataBody = vm.getTableBody(res);
                     vm.original.pageCount = res.pageCount;
                     vm.original.rowCount = res.rowCount;
                 },
@@ -85,8 +111,8 @@ export default {
         /**
          * 需要询问
          */
-        needToAsk(row, func, label) {
-            switch (func) {
+        needToAsk(row, el) {
+            switch (el.func) {
                 // 删除 
                 case 'delete':
                     this.operationsDelete(this.quantityId, label);
@@ -101,8 +127,8 @@ export default {
         /**
          * 不需要需要询问
          */
-        noNeedToAsk(row, func, label) {
-            switch (func) {
+        noNeedToAsk(row, el) {
+            switch (el.func) {
                 // 编辑
                 case 'edit':
                     this.operationsEdit(row);
@@ -114,7 +140,7 @@ export default {
                 default: break;
             }
         },
-        operationsInvalid(){
+        operationsInvalid() {
             console.log('失效');
         },
         /**
